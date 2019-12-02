@@ -6,18 +6,21 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.media.AsyncPlayer;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 class Game extends SurfaceView implements SurfaceHolder.Callback {
-    private  Player player;
+    private Player player;
     private ObstacleManager obstacleManager;
     private GameLoop gameLoop;
-    private  boolean gameOver = false;
-    private  double lives = 3;
-    private  double score=0;
+    private boolean gameOver = false;
+    private int lives = 3;
+    private double score = 0;
+    private double record = 0;
+    private boolean isBreak = false;
 
 
     public Game(Context context) {
@@ -28,7 +31,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         gameLoop = new GameLoop(this, surfaceHolder);
 
         //Initialize game objects
-        player = new Player(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT/2+800, 50);
+        player = new Player(Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT/20*19, Constants.SCREEN_WIDTH / 20);
         obstacleManager = new ObstacleManager();
         setFocusable(true);
     }
@@ -37,16 +40,23 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if(gameOver){
-                    gameOver=false;
+                if (gameOver) {
+                    gameOver = false;
                     reset();
-
                 }
-
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (!gameOver)
-                    player.setPosisionX(event.getX());
+                if (!gameOver) {
+                    if ((int) event.getX() <= 0) {
+                        player.setPosisionX(50);
+                    }
+                    if (event.getX() >= Constants.SCREEN_WIDTH) {
+                        player.setPosisionX(Constants.SCREEN_WIDTH - player.getRadius());
+                    }
+                    if (event.getX() > 0 && event.getX() < Constants.SCREEN_WIDTH) {
+                        player.setPosisionX((int) event.getX());
+                    }
+                }
                 break;
             case MotionEvent.ACTION_UP:
 
@@ -81,10 +91,18 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         obstacleManager.draw(canvas);
 
         Paint paint = new Paint();
-        paint.setTextSize(100);
+        paint.setTextSize(Constants.SCREEN_WIDTH / 10);
         paint.setColor(Color.MAGENTA);
-        canvas.drawText("Score: "+(int)score, 50, 50 + paint.descent() - paint.ascent(), paint);
-        canvas.drawText("Lives: "+(int)lives, 600, 50 + paint.descent() - paint.ascent(), paint);
+        canvas.drawText("Lives: " + lives, Constants.SCREEN_WIDTH / 2 + paint.descent() - paint.ascent(), 50 + paint.descent() - paint.ascent(), paint);
+        canvas.drawText("Score: " + (int) score, 0, 50 + paint.descent() - paint.ascent(), paint);
+        if (isBreak) {
+            record = score;
+            paint.setColor(Color.YELLOW);
+            canvas.drawText("Record: " + (int) record, 0, Constants.SCREEN_HEIGHT / 10 + paint.descent() - paint.ascent(), paint);
+        } else {
+            paint.setColor(Color.MAGENTA);
+            canvas.drawText("Record: " + (int) record, 0, Constants.SCREEN_HEIGHT / 10 + paint.descent() - paint.ascent(), paint);
+        }
 
 
         if (gameOver) {
@@ -98,12 +116,17 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         if (!gameOver) {
             player.update();
             obstacleManager.update();
+            //SystemClock.sleep(140);
             if (obstacleManager.playerCollide(player)) {
-                lives=lives-0.06;
-            }else {
-                score=score+0.03;
+                lives--;
+            } else {
+                score = score + 0.5;
+                if (score - 0.5 > record) {
+                    record = score;
+                    isBreak = true;
+                }
             }
-            if ((int)lives ==0) {
+            if ((int) lives == 0) {
                 gameOver = true;
 
             }
@@ -115,15 +138,17 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     public void drawGameOver(Canvas canvas) {
         Paint paint = new Paint();
         paint.setColor(Color.MAGENTA);
-        paint.setTextSize(150);
-        canvas.drawText("GAME OVER", 110, 500, paint);
+        paint.setTextSize(Constants.SCREEN_WIDTH / 10);
+        canvas.drawText("GAME OVER", Constants.SCREEN_WIDTH / 4, Constants.SCREEN_HEIGHT / 2, paint);
 
     }
+
     public void reset() {
-        lives=3;
-        score=0;
+        lives = 3;
+        score = 0;
+        isBreak = false;
         obstacleManager = new ObstacleManager();
-        player = new Player(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT/2+800, 50);
+        player = new Player(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT - 100, Constants.SCREEN_WIDTH / 20);
 
 
     }

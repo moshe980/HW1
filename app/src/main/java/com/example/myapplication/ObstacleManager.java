@@ -3,14 +3,16 @@ package com.example.myapplication;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.SystemClock;
 
 import java.util.ArrayList;
 
 public class ObstacleManager implements GameObject {
     private ArrayList<Obstacle> obstacles;
-    public static final int OBSTACLES_GAP=400;
+    public static final int OBSTACLES_GAP=1000;
     private long startTime;
     private long initTime;
+    private float speed;
 
     public ObstacleManager() {
         startTime = initTime = System.currentTimeMillis();
@@ -20,11 +22,10 @@ public class ObstacleManager implements GameObject {
 
     private void populateObstacles() {
         //Game time
-        int currY = -5 * 1000000;
+        int currY = -5 * 100000;
 
         while (currY < 0){
-            int xStart = Constants.SCREEN_WIDTH / 3;
-        obstacles.add(new Obstacle(350, currY));
+        obstacles.add(new Obstacle(Constants.SCREEN_WIDTH/3, currY));
         //The gap between each line
         currY += Obstacle.RECT_HEIGHT + OBSTACLES_GAP;
     }
@@ -33,13 +34,18 @@ public class ObstacleManager implements GameObject {
 
     @Override
     public void update() {
-        int elapsedTime = (int) (System.currentTimeMillis() - startTime);
+        int elapsedTime = (int) (System.currentTimeMillis() - startTime);//acceleration
         startTime = System.currentTimeMillis();
-        float speed = (float) (Math.sqrt(1 + (startTime - initTime) / 1000.0)) * Constants.SCREEN_HEIGHT / (10000.0f);
+        float new_speed = (float) (Math.sqrt(1 + (startTime - initTime) / 1000.0)) * Constants.SCREEN_HEIGHT / (10000.0f);
+        if (new_speed<1.2) {//max speed
+             speed=new_speed;
+
+        }else {
+             speed=1;
+        }
         for (int i = 0; i < obstacles.size() - 1; i++) {
             obstacles.get(i).incrementY(speed * elapsedTime);
         }
-
 
         if (obstacles.get(obstacles.size() - 1).getRectangle().top > Constants.SCREEN_HEIGHT) {
             int xStart = Constants.SCREEN_WIDTH / 3;
@@ -59,9 +65,11 @@ public class ObstacleManager implements GameObject {
 
     public boolean playerCollide(Player player) {
         for (int i=0;i<obstacles.size()-1;i++) {
+
             if (obstacles.get(i).playerCollide(player)) {
                 return true;
             }
+
         }
 
         return false;

@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 class Player implements GameObject {
     private double positionX;
@@ -14,23 +15,13 @@ class Player implements GameObject {
         this.positionY=positionY;
         this.radius=radius;
 
-       ;
 
     }
-    public double getLeft(){
-        return positionX-radius;
-    }
-    public double getright(){
-        return positionX+radius;
+
+    public double getRadius(){
+        return radius;
     }
 
-    public double getTop(){
-        return positionY+radius;
-    }
-
-    public double getBottom(){
-        return positionY-radius;
-    }
 
 
     public void draw(Canvas canvas) {
