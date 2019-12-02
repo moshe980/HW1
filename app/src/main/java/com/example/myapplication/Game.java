@@ -31,7 +31,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         gameLoop = new GameLoop(this, surfaceHolder);
 
         //Initialize game objects
-        player = new Player(Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT/20*19, Constants.SCREEN_WIDTH / 20);
+        player = new Player(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT/20*19, Constants.SCREEN_WIDTH / 20);
         obstacleManager = new ObstacleManager();
         setFocusable(true);
     }
@@ -116,11 +116,11 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         if (!gameOver) {
             player.update();
             obstacleManager.update();
-            //SystemClock.sleep(140);
+            //SystemClock.sleep(50);
             if (obstacleManager.playerCollide(player)) {
                 lives--;
             } else {
-                score = score + 0.5;
+                score = score + 0.05;
                 if (score - 0.5 > record) {
                     record = score;
                     isBreak = true;
@@ -148,7 +148,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         score = 0;
         isBreak = false;
         obstacleManager = new ObstacleManager();
-        player = new Player(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT - 100, Constants.SCREEN_WIDTH / 20);
+        player = new Player(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT/20*19, Constants.SCREEN_WIDTH / 20);
 
 
     }

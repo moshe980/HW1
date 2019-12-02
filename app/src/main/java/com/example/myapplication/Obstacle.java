@@ -54,26 +54,14 @@ class Obstacle implements GameObject {
     public void update() {
 
     }
-
+//15
     public boolean playerCollide(Player player) {
-       // Log.d("PLAYER", String.valueOf(player.getPositionX()));
-      //  Log.d("RECT0.R", String.valueOf(rectangles[0].right));
-      //  Log.d("RECT1.L", String.valueOf(rectangles[1].left));
-       // Log.d("RECT1.R", String.valueOf(rectangles[1].right));
-       // Log.d("RECT2.L", String.valueOf(rectangles[2].left));
-        Log.d("RECT0.B", String.valueOf(rectangles[0].bottom));
-        Log.d("Player.y", String.valueOf(player.getPositionY()));
-
-
-        if(rectangles[0].left==player.getPositionX()
-          ||rectangles[1].left==player.getPositionX()
-          ||rectangles[1].right==player.getPositionX()
-          ||rectangles[2].left==player.getPositionX()
-          ||rectangles[0].bottom==500){
-            return true;
+        for(Rect rect:rectangles){
+           if( rect.contains((int)player.getPositionX(),(int)(player.getPositionY()-player.getRadius()*2))) {
+               rect.setEmpty();
+               return true;
+           }
         }
-
-
 
         return false;
 

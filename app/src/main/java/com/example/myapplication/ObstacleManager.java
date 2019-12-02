@@ -33,16 +33,13 @@ public class ObstacleManager implements GameObject {
     }
 
     @Override
+
+
     public void update() {
         int elapsedTime = (int) (System.currentTimeMillis() - startTime);//acceleration
         startTime = System.currentTimeMillis();
-        float new_speed = (float) (Math.sqrt(1 + (startTime - initTime) / 1000.0)) * Constants.SCREEN_HEIGHT / (10000.0f);
-        if (new_speed<1.2) {//max speed
-             speed=new_speed;
+        float speed = (float) (Math.sqrt(1 + (startTime - initTime) / 1000.0)) * Constants.SCREEN_HEIGHT / (10000.0f);
 
-        }else {
-             speed=1;
-        }
         for (int i = 0; i < obstacles.size() - 1; i++) {
             obstacles.get(i).incrementY(speed * elapsedTime);
         }
