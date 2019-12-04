@@ -30,7 +30,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         gameLoop = new GameLoop(this, surfaceHolder);
 
-        //Initialize game objects
+        //Initialize game  objects
         player = new Player(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT/20*19, Constants.SCREEN_WIDTH / 20);
         obstacleManager = new ObstacleManager();
         setFocusable(true);
