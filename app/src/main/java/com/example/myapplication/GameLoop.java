@@ -1,7 +1,6 @@
 package com.example.myapplication;
 
 import android.graphics.Canvas;
-import android.os.SystemClock;
 import android.view.SurfaceHolder;
 
 class GameLoop extends Thread {
@@ -29,7 +28,7 @@ class GameLoop extends Thread {
 
         Canvas canvas = null;
         while (isRunning) {
-            //Try to update and render game
+            //update and render game
             try {
                 canvas = surfaceHolder.lockCanvas();
                 synchronized (surfaceHolder) {

@@ -4,10 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
-import android.media.AsyncPlayer;
-import android.os.SystemClock;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -27,6 +23,8 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         super(context);
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
+
+        Constants.CURRENT_CONTEXT=context;
 
         gameLoop = new GameLoop(this, surfaceHolder);
 
@@ -54,11 +52,14 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
                         player.setPosisionX(Constants.SCREEN_WIDTH - player.getRadius());
                     }
                     if (event.getX() > 0 && event.getX() < Constants.SCREEN_WIDTH) {
+
                         player.setPosisionX((int) event.getX());
                     }
                 }
                 break;
             case MotionEvent.ACTION_UP:
+                break;
+
 
         }
         return true;

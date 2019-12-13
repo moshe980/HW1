@@ -1,10 +1,6 @@
 package com.example.myapplication;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.os.SystemClock;
-
 import java.util.ArrayList;
 
 public class ObstacleManager implements GameObject {
@@ -12,7 +8,6 @@ public class ObstacleManager implements GameObject {
     public static final int OBSTACLES_GAP=1000;
     private long startTime;
     private long initTime;
-    private float speed;
 
     public ObstacleManager() {
         startTime = initTime = System.currentTimeMillis();
@@ -25,7 +20,7 @@ public class ObstacleManager implements GameObject {
         int currY = -5 * 100000;
 
         while (currY < 0){
-        obstacles.add(new Obstacle(Constants.SCREEN_WIDTH/3, currY));
+        obstacles.add(new Obstacle(Constants.SCREEN_WIDTH/5, currY));
         //The gap between each line
         currY += Obstacle.RECT_HEIGHT + OBSTACLES_GAP;
     }
