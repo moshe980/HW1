@@ -13,6 +13,10 @@ class GameLoop extends Thread {
         this.game = game;
         this.surfaceHolder = surfaceHolder;
 
+
+    }
+    public void setRunning(Boolean isRunning){
+        this.isRunning=isRunning;
     }
 
 
@@ -24,7 +28,7 @@ class GameLoop extends Thread {
     @Override
     public void run() {
         super.run();
-
+        int frameCount=0;
 
         Canvas canvas = null;
         while (isRunning) {
@@ -48,7 +52,11 @@ class GameLoop extends Thread {
                 }
 
             }
-
+            frameCount++;
+            if(frameCount==30){
+                frameCount=0;
+            }
+            System.out.println(frameCount);
         }
     }
 }

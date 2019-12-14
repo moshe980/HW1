@@ -1,8 +1,12 @@
 package com.example.myapplication;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.os.SystemClock;
 import android.util.Log;
@@ -15,6 +19,10 @@ class Obstacle implements GameObject {
     public static final int RECT_HEIGHT = 150;
     public static final int GAP = 15;
     private Random random = new Random();
+    private Bitmap bitmap;
+    private AnimationManager animationManager;
+    private Animation meteor;
+
 
 
     public Obstacle(int positionX, int positionY) {
@@ -25,6 +33,14 @@ class Obstacle implements GameObject {
         rectangles[2] = new Rect(positionX * 2 + GAP, positionY, positionX * 3 - GAP, positionY + RECT_HEIGHT);
         rectangles[3] = new Rect(positionX*3 + GAP, positionY, positionX * 4, positionY + RECT_HEIGHT);
         rectangles[4] = new Rect(positionX * 4 + GAP, positionY, positionX * 5 - GAP, positionY + RECT_HEIGHT);
+
+        //BitmapFactory bf= new BitmapFactory();
+        //Bitmap meteor_Image=bf.decodeResource(Constants.CURRENT_CONTEXT.getResources(),R.drawable.meteor_small);
+        //meteor=new Animation(new Bitmap[]{meteor_Image},2);
+
+       // animationManager=new AnimationManager(new Animation[]{meteor});
+
+
 
 
     }
@@ -45,22 +61,27 @@ class Obstacle implements GameObject {
     @Override
     public void draw(Canvas canvas) {
         Paint paint = new Paint();
-        paint.setColor(Color.BLACK);
+        paint.setColor(Color.rgb(117,62,0));
+
+
         rectangles[counter].setEmpty();
         for (Rect rect : rectangles) {
+           // animationManager.draw(canvas,rect);
             canvas.drawRect(rect, paint);
+
         }
 
     }
 
     @Override
     public void update() {
+        animationManager.update();
 
     }
-//15
+
     public boolean playerCollide(Player player) {
         for(Rect rect:rectangles){
-           if( rect.contains((int)player.getPositionX(),(int)(player.getPositionY()-player.getRadius()*2))) {
+           if(rect.intersect(player.getRectangle())){
                rect.setEmpty();
                return true;
            }

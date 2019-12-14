@@ -1,22 +1,32 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 class Game extends SurfaceView implements SurfaceHolder.Callback {
     private Player player;
+    private Point playerPoint;
     private ObstacleManager obstacleManager;
     private GameLoop gameLoop;
     private boolean gameOver = false;
-    private int lives = 3;
+    private int lives = 1000;
     private double score = 0;
     private double record = 0;
     private boolean isBreak = false;
+    private final int POSITION_Y = Constants.SCREEN_HEIGHT / 20 * 18;
+    private boolean movingPlayer = false;
+    private OrientationData orientationData;
+    private long frameTime;
 
 
     public Game(Context context) {
@@ -24,13 +34,17 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
 
-        Constants.CURRENT_CONTEXT=context;
+        Constants.CURRENT_CONTEXT = context;
 
         gameLoop = new GameLoop(this, surfaceHolder);
 
         //Initialize game  objects
-        player = new Player(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT/20*19, Constants.SCREEN_WIDTH / 20);
+        player = new Player(new Rect(100, 0, 250, 200));
+        playerPoint = new Point(Constants.SCREEN_WIDTH / 2, POSITION_Y);
         obstacleManager = new ObstacleManager();
+        orientationData = new OrientationData();
+        orientationData.register();
+        frameTime = System.currentTimeMillis();
         setFocusable(true);
     }
 
@@ -41,23 +55,20 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
                 if (gameOver) {
                     gameOver = false;
                     reset();
+                    orientationData.newGame();
+                } else if (player.getRectangle().contains((int) event.getX(), (int) event.getY())) {
+                    movingPlayer = true;
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (!gameOver) {
-                    if ((int) event.getX() <= 0) {
-                        player.setPosisionX(50);
-                    }
-                    if (event.getX() >= Constants.SCREEN_WIDTH) {
-                        player.setPosisionX(Constants.SCREEN_WIDTH - player.getRadius());
-                    }
-                    if (event.getX() > 0 && event.getX() < Constants.SCREEN_WIDTH) {
+                if (!gameOver && movingPlayer) {
+                    playerPoint.set((int) event.getX(), POSITION_Y);
 
-                        player.setPosisionX((int) event.getX());
-                    }
+
                 }
                 break;
             case MotionEvent.ACTION_UP:
+                movingPlayer = false;
                 break;
 
 
@@ -68,6 +79,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        Constants.INIT_TIME = System.currentTimeMillis();
         gameLoop.startLoop();
     }
 
@@ -79,19 +91,18 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-
+        gameLoop.setRunning(false);
     }
 
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-
-        canvas.drawColor(Color.WHITE);
-
+        canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.star_background), 0, 0, null);
         player.draw(canvas);
         obstacleManager.draw(canvas);
 
         Paint paint = new Paint();
+
         paint.setTextSize(Constants.SCREEN_WIDTH / 10);
         paint.setColor(Color.MAGENTA);
         canvas.drawText("Lives: " + lives, Constants.SCREEN_WIDTH / 2 + paint.descent() - paint.ascent(), 50 + paint.descent() - paint.ascent(), paint);
@@ -115,9 +126,26 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update() {
         if (!gameOver) {
-            player.update();
+            if (frameTime < Constants.INIT_TIME)
+                frameTime = Constants.INIT_TIME;
+            int elapsedTime = (int) (System.currentTimeMillis() - frameTime);
+            frameTime = System.currentTimeMillis();
+            if (orientationData.getOrientation() != null && orientationData.getStartOrientation() != null) {
+                float pitch = orientationData.getOrientation()[1] - orientationData.getStartOrientation()[1];
+                float roll = orientationData.getOrientation()[2] - orientationData.getStartOrientation()[2];
+
+                float xspeed = 2 * roll * Constants.SCREEN_WIDTH / 1000f;
+
+                playerPoint.x += Math.abs(xspeed * elapsedTime) > 5 ? xspeed * elapsedTime : 0;
+            }
+            if (playerPoint.x < 0)
+                playerPoint.x = 0;
+            else if (playerPoint.x > Constants.SCREEN_WIDTH)
+                playerPoint.x = Constants.SCREEN_WIDTH;
+
+
+            player.update(playerPoint);
             obstacleManager.update();
-            //SystemClock.sleep(50);
             if (obstacleManager.playerCollide(player)) {
                 lives--;
             } else {
@@ -149,7 +177,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         score = 0;
         isBreak = false;
         obstacleManager = new ObstacleManager();
-        player = new Player(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT/20*19, Constants.SCREEN_WIDTH / 20);
+        playerPoint = new Point(150, 150);
 
 
     }
