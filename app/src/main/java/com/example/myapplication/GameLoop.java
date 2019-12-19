@@ -56,7 +56,6 @@ class GameLoop extends Thread {
             if(frameCount==30){
                 frameCount=0;
             }
-            System.out.println(frameCount);
         }
     }
 }

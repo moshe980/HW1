@@ -27,6 +27,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     private boolean movingPlayer = false;
     private OrientationData orientationData;
     private long frameTime;
+    private Background background;
 
 
     public Game(Context context) {
@@ -80,6 +81,8 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         Constants.INIT_TIME = System.currentTimeMillis();
+        background=new Background(BitmapFactory.decodeResource(getResources(),R.drawable.star_background));
+        background.setVactor(5);
         gameLoop.startLoop();
     }
 
@@ -97,7 +100,8 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.star_background), 0, 0, null);
+
+        background.draw(canvas);
         player.draw(canvas);
         obstacleManager.draw(canvas);
 
@@ -143,7 +147,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
             else if (playerPoint.x > Constants.SCREEN_WIDTH)
                 playerPoint.x = Constants.SCREEN_WIDTH;
 
-
+            background.update();
             player.update(playerPoint);
             obstacleManager.update();
             if (obstacleManager.playerCollide(player)) {
