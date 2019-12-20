@@ -5,11 +5,12 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 
 public class Explosion implements GameObject {
-    private int x,y,width,height,row;
-    private Animation animation;
-    private Bitmap bitmap;
-    private Bitmap[] image;
-    private AnimationManager animationManager;
+    private int rowIndex = 0 ;
+    private int colIndex = -1 ;
+
+    private boolean finish= false;
+    private GameSurface gameSurface;
+
 
     public Explosion(Bitmap bitmap,int x,int y,int width,int height,int numFrames){
         this.x=x;

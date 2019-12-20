@@ -64,6 +64,5 @@ class Player implements GameObject {
             state=2;
 
         animationManager.playAnime(state);
-        animationManager.update();
 }
 }

@@ -159,9 +159,9 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
                 }
             }
             if(awardsManager.playerCollide(player)){
-                score+=2000;
+                score+=200;
             }
-            if ((int) lives == 0) {
+            if ( lives == 0) {
                 gameOver = true;
 
             }
