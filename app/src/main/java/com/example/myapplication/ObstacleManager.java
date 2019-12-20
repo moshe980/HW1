@@ -8,6 +8,7 @@ public class ObstacleManager implements GameObject {
     public static final int OBSTACLES_GAP=1000;
     private long startTime;
     private long initTime;
+    private float speed;
 
     public ObstacleManager() {
         startTime = initTime = System.currentTimeMillis();
@@ -26,14 +27,14 @@ public class ObstacleManager implements GameObject {
     }
 
     }
-
+    public float getSpeed(){
+        return speed;
+    }
     @Override
-
-
     public void update() {
         int elapsedTime = (int) (System.currentTimeMillis() - startTime);//acceleration
         startTime = System.currentTimeMillis();
-        float speed = (float) (Math.sqrt(1 + (startTime - initTime) / 1000.0)) * Constants.SCREEN_HEIGHT / (10000.0f);
+        speed = (float) (Math.sqrt(1 + (startTime - initTime) / 1000.0)) * Constants.SCREEN_HEIGHT / (10000.0f);
 
         for (int i = 0; i < obstacles.size() - 1; i++) {
             obstacles.get(i).incrementY(speed * elapsedTime);

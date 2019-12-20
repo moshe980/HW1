@@ -21,6 +21,9 @@ public class Animation {
         lastFrame=System.currentTimeMillis();
 
     }
+    public Bitmap getImage(){
+        return frames[frameIndex];
+    }
     public void stop(){
         isPlaying=false;
     }
@@ -55,11 +58,16 @@ public class Animation {
         if(!isPlaying)
             return;
 
-        if(System.currentTimeMillis()-lastFrame>frameTime*1000){
+        if(System.currentTimeMillis()-lastFrame>frameTime*1000000){
             frameIndex++;
             frameIndex=frameIndex>=frames.length?0:frameIndex;
             lastFrame=System.currentTimeMillis();
         }
+    }
+    public void setFrames(Bitmap[] frames){
+        this.frames=frames;
+        frameIndex=0;
+        frameTime=System.nanoTime();
     }
 
 

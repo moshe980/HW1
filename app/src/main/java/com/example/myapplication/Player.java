@@ -16,6 +16,7 @@ class Player implements GameObject {
     private  Animation flyRight;
     private  Animation flyLeft;
     private AnimationManager animationManager;
+    private int state=0;
 
     public Player(Rect rectangle){
         this.rectangle=rectangle;
@@ -57,11 +58,9 @@ class Player implements GameObject {
 
         rectangle.set(point.x-rectangle.width()/2,point.y-rectangle.height()/2,point.x+rectangle.width()/2,
                 point.y+rectangle.height());
-
-        int state=0;
-        if(rectangle.left-oldLeft>5)
+        if(rectangle.left-oldLeft>1)
             state=1;
-        else if (rectangle.left-oldLeft<-5)
+        else if (rectangle.left-oldLeft<-1)
             state=2;
 
         animationManager.playAnime(state);

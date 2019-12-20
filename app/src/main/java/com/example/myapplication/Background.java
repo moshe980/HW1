@@ -26,7 +26,6 @@ public class Background implements GameObject {
     @Override
     public void update() {
      y+=dy;
-        System.out.println(y);
      if (y>0){
          y=-Constants.SCREEN_HEIGHT;
      }

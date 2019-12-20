@@ -17,9 +17,10 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     private Player player;
     private Point playerPoint;
     private ObstacleManager obstacleManager;
+    private AwardsManager awardsManager;
     private GameLoop gameLoop;
     private boolean gameOver = false;
-    private int lives = 1000;
+    private int lives = 3;
     private double score = 0;
     private double record = 0;
     private boolean isBreak = false;
@@ -43,6 +44,10 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         player = new Player(new Rect(100, 0, 250, 200));
         playerPoint = new Point(Constants.SCREEN_WIDTH / 2, POSITION_Y);
         obstacleManager = new ObstacleManager();
+        awardsManager=new AwardsManager();
+
+
+
         orientationData = new OrientationData();
         orientationData.register();
         frameTime = System.currentTimeMillis();
@@ -63,6 +68,10 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (!gameOver && movingPlayer) {
+                    if (playerPoint.x < 0)
+                        playerPoint.x = 0;
+                    else if (playerPoint.x > Constants.SCREEN_WIDTH)
+                        playerPoint.x = Constants.SCREEN_WIDTH;
                     playerPoint.set((int) event.getX(), POSITION_Y);
 
 
@@ -82,7 +91,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder) {
         Constants.INIT_TIME = System.currentTimeMillis();
         background=new Background(BitmapFactory.decodeResource(getResources(),R.drawable.star_background));
-        background.setVactor(5);
+        background.setVactor(20);
         gameLoop.startLoop();
     }
 
@@ -104,7 +113,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         background.draw(canvas);
         player.draw(canvas);
         obstacleManager.draw(canvas);
-
+        awardsManager.draw(canvas);
         Paint paint = new Paint();
 
         paint.setTextSize(Constants.SCREEN_WIDTH / 10);
@@ -132,25 +141,15 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         if (!gameOver) {
             if (frameTime < Constants.INIT_TIME)
                 frameTime = Constants.INIT_TIME;
-            int elapsedTime = (int) (System.currentTimeMillis() - frameTime);
             frameTime = System.currentTimeMillis();
-            if (orientationData.getOrientation() != null && orientationData.getStartOrientation() != null) {
-                float pitch = orientationData.getOrientation()[1] - orientationData.getStartOrientation()[1];
-                float roll = orientationData.getOrientation()[2] - orientationData.getStartOrientation()[2];
-
-                float xspeed = 2 * roll * Constants.SCREEN_WIDTH / 1000f;
-
-                playerPoint.x += Math.abs(xspeed * elapsedTime) > 5 ? xspeed * elapsedTime : 0;
-            }
-            if (playerPoint.x < 0)
-                playerPoint.x = 0;
-            else if (playerPoint.x > Constants.SCREEN_WIDTH)
-                playerPoint.x = Constants.SCREEN_WIDTH;
 
             background.update();
             player.update(playerPoint);
             obstacleManager.update();
+            awardsManager.update();
+
             if (obstacleManager.playerCollide(player)) {
+
                 lives--;
             } else {
                 score = score + 0.05;
@@ -158,6 +157,9 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
                     record = score;
                     isBreak = true;
                 }
+            }
+            if(awardsManager.playerCollide(player)){
+                score+=2000;
             }
             if ((int) lives == 0) {
                 gameOver = true;
@@ -181,6 +183,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         score = 0;
         isBreak = false;
         obstacleManager = new ObstacleManager();
+        awardsManager=new AwardsManager();
         playerPoint = new Point(150, 150);
 
 
