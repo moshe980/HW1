@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -12,6 +13,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Button;
+import android.widget.EditText;
 
 class Game extends SurfaceView implements SurfaceHolder.Callback {
     private Player player;
@@ -45,7 +48,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         Constants.CURRENT_CONTEXT = context;
 
-        gameLoop = new GameLoop(this, surfaceHolder);
+        gameLoop = new GameLoop(this, surfaceHolder,context);
 
         //Initialize game  objects
         player = new Player(BitmapFactory.decodeResource(getResources(),R.drawable.player),new Rect(100, 0, 250, 200));
@@ -143,7 +146,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
 
         if (gameOver) {
-            drawGameOver(canvas);
+
         }
 
     }
@@ -212,6 +215,9 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         playerPoint = new Point(Constants.SCREEN_WIDTH / 2, POSITION_Y);
 
 
+    }
+    public boolean getGameOver(){
+        return gameOver;
     }
 
 }

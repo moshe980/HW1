@@ -14,6 +14,7 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
     private Button button;
     private Context context;
+    private Game game;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,12 +36,20 @@ public class MainActivity extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setContentView(new Game(context));
+                    game=new Game(context);
+                    setContentView(game);
+
                 }
             });
 
 
 
+
+
     }
 
+    public void openR(){
+        startActivity(new Intent(context,Registration.class));
+
+    }
 }

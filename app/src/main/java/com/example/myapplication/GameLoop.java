@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
@@ -7,11 +9,14 @@ class GameLoop extends Thread {
     private boolean isRunning = false;
     private SurfaceHolder surfaceHolder;
     private Game game;
+    public static   boolean flag=false;
+    private Context context;
 
 
-    public GameLoop(Game game, SurfaceHolder surfaceHolder) {
+    public GameLoop(Game game, SurfaceHolder surfaceHolder, Context context) {
         this.game = game;
         this.surfaceHolder = surfaceHolder;
+        this.context=context;
 
 
     }
@@ -38,6 +43,11 @@ class GameLoop extends Thread {
                 synchronized (surfaceHolder) {
                     game.update();
                     game.draw(canvas);
+                    if(game.getGameOver()){
+                        game.surfaceDestroyed(surfaceHolder);
+                        Intent intent=new Intent(context,Registration.class);
+                        context.startActivity(intent);
+                    }
                 }
 
             } catch (Exception e) {
@@ -57,5 +67,8 @@ class GameLoop extends Thread {
                 frameCount=0;
             }
         }
+    }
+    public static boolean getFlag(){
+        return  flag;
     }
 }
