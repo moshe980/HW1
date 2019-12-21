@@ -7,68 +7,38 @@ import android.graphics.Rect;
 
 public class Animation {
     private Bitmap[] frames;
-    private int frameIndex;
-    private boolean isPlaying=false;
-    private float frameTime;
-    private long lastFrame;
+    private int currentFrame;
+    private long startTime;
+    private long delay;
+    private boolean playedOnce;
 
-    public boolean isPlaying(){
-        return isPlaying;
+    public void setFrames(Bitmap[] frames)
+    {
+        this.frames = frames;
+        currentFrame = 0;
+        startTime = System.nanoTime();
     }
-    public void play(){
-        isPlaying=true;
-        frameIndex=0;
-        lastFrame=System.currentTimeMillis();
+    public void setDelay(long d){delay = d;}
+    public void setFrame(int i){currentFrame= i;}
 
-    }
-    public Bitmap getImage(){
-        return frames[frameIndex];
-    }
-    public void stop(){
-        isPlaying=false;
-    }
-    public Animation(Bitmap[] frames,float animTime){
-        this.frames=frames;
-        frameIndex=0;
+    public void update()
+    {
+        long elapsed = (System.nanoTime()-startTime)/1000000;
 
-        frameTime=animTime/frames.length;
-
-        lastFrame=System.currentTimeMillis();
-    }
-
-    public void draw(Canvas canvas, Rect destination){
-        if(!isPlaying)
-            return;
-
-        scaleRect(destination);
-
-        canvas.drawBitmap(frames[frameIndex],null,destination,new Paint());
-
-    }
-    private void scaleRect(Rect rect){
-        float whRatio=(float)(frames[frameIndex].getWidth())/frames[frameIndex].getHeight();
-        if (rect.width()>rect.height())
-            rect.left=rect.right-(int)(rect.height()*whRatio);
-            else
-            rect.top=rect.bottom-(int)(rect.width()*(1/whRatio));
-
-
-    }
-    public void update(){
-        if(!isPlaying)
-            return;
-
-        if(System.currentTimeMillis()-lastFrame>frameTime*1000000){
-            frameIndex++;
-            frameIndex=frameIndex>=frames.length?0:frameIndex;
-            lastFrame=System.currentTimeMillis();
+        if(elapsed>delay)
+        {
+            currentFrame++;
+            startTime = System.nanoTime();
+        }
+        if(currentFrame == frames.length){
+            currentFrame = 0;
+            playedOnce = true;
         }
     }
-    public void setFrames(Bitmap[] frames){
-        this.frames=frames;
-        frameIndex=0;
-        frameTime=System.nanoTime();
+    public Bitmap getImage(){
+        return frames[currentFrame];
     }
-
+    public int getFrame(){return currentFrame;}
+    public boolean playedOnce(){return playedOnce;}
 
 }

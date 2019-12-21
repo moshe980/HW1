@@ -29,6 +29,13 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     private OrientationData orientationData;
     private long frameTime;
     private Background background;
+    private Explosion explosion;
+    private long startReset;
+    private boolean reset;
+    private boolean dissapear;
+    private boolean started;
+    private int best;
+    private boolean isExplode=false;
 
 
     public Game(Context context) {
@@ -41,10 +48,13 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         gameLoop = new GameLoop(this, surfaceHolder);
 
         //Initialize game  objects
-        player = new Player(new Rect(100, 0, 250, 200));
+        player = new Player(BitmapFactory.decodeResource(getResources(),R.drawable.player),new Rect(100, 0, 250, 200));
         playerPoint = new Point(Constants.SCREEN_WIDTH / 2, POSITION_Y);
-        obstacleManager = new ObstacleManager();
+
+
+        obstacleManager = new ObstacleManager(BitmapFactory.decodeResource(getResources(),R.drawable.asteroid));
         awardsManager=new AwardsManager();
+
 
 
 
@@ -91,7 +101,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder) {
         Constants.INIT_TIME = System.currentTimeMillis();
         background=new Background(BitmapFactory.decodeResource(getResources(),R.drawable.star_background));
-        background.setVactor(20);
+        background.setVactor(20);//speed
         gameLoop.startLoop();
     }
 
@@ -115,7 +125,9 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         obstacleManager.draw(canvas);
         awardsManager.draw(canvas);
         Paint paint = new Paint();
-
+        if(isExplode) {
+            explosion.draw(canvas);
+        }
         paint.setTextSize(Constants.SCREEN_WIDTH / 10);
         paint.setColor(Color.MAGENTA);
         canvas.drawText("Lives: " + lives, Constants.SCREEN_WIDTH / 2 + paint.descent() - paint.ascent(), 50 + paint.descent() - paint.ascent(), paint);
@@ -145,14 +157,27 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
             background.update();
             player.update(playerPoint);
+            if(player.getState()==1){
+                player.setImage(BitmapFactory.decodeResource(getResources(),R.drawable.playe_right,null));
+            }else if(player.getState()==2) {
+                player.setImage(BitmapFactory.decodeResource(getResources(), R.drawable.player_left, null));
+            }else if(player.getState()==0){
+                player.setImage(BitmapFactory.decodeResource(getResources(), R.drawable.player, null));
+            }
+
             obstacleManager.update();
             awardsManager.update();
+            explosion = new Explosion(BitmapFactory.decodeResource(getResources(),R.drawable.explosion),playerPoint.x-85,
+                    playerPoint.y-70, 150, 150, 25);
+
 
             if (obstacleManager.playerCollide(player)) {
-
+                explosion.update();
+                isExplode=true;
                 lives--;
             } else {
                 score = score + 0.05;
+                isExplode=false;
                 if (score - 0.5 > record) {
                     record = score;
                     isBreak = true;
@@ -182,9 +207,9 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         lives = 3;
         score = 0;
         isBreak = false;
-        obstacleManager = new ObstacleManager();
+        obstacleManager = new ObstacleManager(BitmapFactory.decodeResource(getResources(),R.drawable.asteroid));
         awardsManager=new AwardsManager();
-        playerPoint = new Point(150, 150);
+        playerPoint = new Point(Constants.SCREEN_WIDTH / 2, POSITION_Y);
 
 
     }

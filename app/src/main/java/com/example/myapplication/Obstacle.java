@@ -18,13 +18,16 @@ class Obstacle implements GameObject {
     private Rect rectangles[];
     public static final int RECT_HEIGHT = 150;
     public static final int GAP = 15;
+    Bitmap image;
 
 
 
-    public Obstacle(int positionX, int positionY) {
+
+    public Obstacle(Bitmap image,int positionX, int positionY) {
         rectangles = new Rect[5];
         counter1 = new Random().nextInt(5);
         counter2 = new Random().nextInt(5);
+        this.image=image;
 
         rectangles[0] = new Rect(GAP, positionY, positionX, positionY + RECT_HEIGHT);
         rectangles[1] = new Rect(positionX + GAP, positionY, positionX * 2, positionY + RECT_HEIGHT);
@@ -49,14 +52,12 @@ class Obstacle implements GameObject {
 
     @Override
     public void draw(Canvas canvas) {
-        Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
-
         rectangles[counter1].setEmpty();
         rectangles[counter2].setEmpty();
 
         for (Rect rect : rectangles) {
-           canvas.drawRect(rect, paint);
+            canvas.drawBitmap(image,null,rect,null);
+
 
         }
 
