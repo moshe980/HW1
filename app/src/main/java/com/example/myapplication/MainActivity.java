@@ -10,46 +10,44 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity {
-    private Button button;
+    private ImageButton play_button;
     private Context context;
     private Game game;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context=this;
+        context = this;
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        DisplayMetrics dm=new DisplayMetrics();
+        DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        Constants.SCREEN_WIDTH=dm.widthPixels;
-        Constants.SCREEN_HEIGHT=dm.heightPixels;
+        Constants.SCREEN_WIDTH = dm.widthPixels;
+        Constants.SCREEN_HEIGHT = dm.heightPixels;
 
 
+        setContentView(R.layout.activity_main);
 
-            setContentView(R.layout.activity_main);
+        play_button = (ImageButton) findViewById(R.id.btn_play);
+        play_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                game = new Game(context);
+                setContentView(game);
 
-            button = (Button) findViewById(R.id.startButton);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    game=new Game(context);
-                    setContentView(game);
-
-                }
-            });
-
-
-
+            }
+        });
 
 
     }
 
-    public void openR(){
-        startActivity(new Intent(context,Registration.class));
+    public void openR() {
+        startActivity(new Intent(context, Registration.class));
 
     }
 }

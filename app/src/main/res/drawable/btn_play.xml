@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/play"
+    android:state_pressed="true"/>
+
+    <!-- This is defines button when clicked -->
+    <item android:drawable="@drawable/play"
+        android:state_pressed="true"/>
+
+    <item android:drawable="@drawable/play_press"/>
+
+
+</selector>

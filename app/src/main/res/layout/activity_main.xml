@@ -4,22 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:background="@drawable/screenshot"
+    android:orientation="vertical"
+    android:background="@drawable/game_start"
     tools:context=".MainActivity">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginTop="100dp">
 
-    <Button
-        android:id="@+id/startButton"
-        android:layout_width="match_parent"
+    <ImageButton
+        android:id="@+id/btn_play"
+        android:src="@drawable/btn_play"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="40dp"
         android:text="Start Game"
         android:layout_gravity="center"
+        android:background="#00000000"/>
 
-        />
+        <ImageButton
+            android:id="@+id/btn_high_score"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/btn_high_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="40dp"
+            android:text="Start Game"
+            android:layout_gravity="center"
+            android:background="#00000000"/>
 
 
 
-
+    </LinearLayout>
 </LinearLayout>
