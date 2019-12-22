@@ -24,7 +24,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     private GameLoop gameLoop;
     private boolean gameOver = false;
     private int lives = 3;
-    private double score = 0;
+    private static double score = 0;
     private double record = 0;
     private boolean isBreak = false;
     private final int POSITION_Y = Constants.SCREEN_HEIGHT / 20 * 18;
@@ -218,6 +218,10 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     }
     public boolean getGameOver(){
         return gameOver;
+    }
+
+    public static int getScore(){
+        return (int)score;
     }
 
 }

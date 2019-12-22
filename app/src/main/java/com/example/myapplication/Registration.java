@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,7 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class Registration extends Activity {
     private TextView textView;
     private EditText editText;
-    private Button button;
+    private ImageButton save_button;
     private DatabaseReference databaseUsers;
 
 
@@ -29,10 +30,13 @@ public class Registration extends Activity {
 
         textView=(TextView)findViewById(R.id.textView);
         editText=(EditText)findViewById(R.id.editText);
-        button=(Button)findViewById(R.id.button);
+        save_button=(ImageButton)findViewById(R.id.btn_save);
+
+        getWindow().setLayout((int) (Constants.SCREEN_WIDTH*.8), (int) (Constants.SCREEN_HEIGHT*.6));
         databaseUsers = FirebaseDatabase.getInstance().getReference("users");
 
-        button.setOnClickListener(new View.OnClickListener() {
+        textView.setText("Your score: "+Game.getScore());
+        save_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addUserName();

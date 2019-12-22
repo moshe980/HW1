@@ -12,4 +12,9 @@
         <item name="windowNoTitle" tools:ignore="DuplicateDefinition">true</item>
 
     </style>
+    <style name="AppTheme.CustumTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
 </resources>
