@@ -21,11 +21,9 @@ public class Explosion implements GameObject {
 
         spritesheet = res;
 
-        for(int i = 0; i<image.length; i++)
-        {
 
-            image[i] = Bitmap.createBitmap(spritesheet,i*width,0,width,spritesheet.getHeight());
-        }
+            image[0] = Bitmap.createBitmap(spritesheet,0,0,width,spritesheet.getHeight());
+
         animation.setFrames(image);
 //
 
