@@ -8,43 +8,36 @@ public class Explosion implements GameObject {
     private int x;
     private int y;
     private int width;
-    private Animation animation = new Animation();
     private Bitmap spritesheet;
-    private Bitmap[] image;
+    private Bitmap image;
 
-    public Explosion(Bitmap res, int w, int numFrames)
-    {
+    public Explosion(Bitmap res, int w, int numFrames) {
 
         this.width = w;
 
-        image = new Bitmap[numFrames];
 
         spritesheet = res;
 
 
-            image[0] = Bitmap.createBitmap(spritesheet,0,0,width,spritesheet.getHeight());
-
-        animation.setFrames(image);
-//
+        image = Bitmap.createBitmap(spritesheet, 0, 0, width, spritesheet.getHeight());
 
 
     }
+
     @Override
-    public void draw(Canvas canvas)
-    {
+    public void draw(Canvas canvas) {
 
-            canvas.drawBitmap(image[0],x,y,null);
-
-
+        canvas.drawBitmap(image, x, y, null);
 
 
     }
+
     @Override
-    public void update()
-    {
+    public void update() {
 
     }
-    public void setPosition(int x,int y){
+
+    public void setPosition(int x, int y) {
         this.x = x;
         this.y = y;
     }

@@ -26,7 +26,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     private long frameTime;
     private Background background;
     private Explosion explosion;
-    private boolean isExplode=false;
+    private boolean isExplode = false;
 
 
     public Game(Context context) {
@@ -36,23 +36,23 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         Constants.CURRENT_CONTEXT = context;
 
-        gameLoop = new GameLoop(this, surfaceHolder,context);
+        gameLoop = new GameLoop(this, surfaceHolder, context);
 
-        score=0;
-        lives=3;
+        score = 0;
+        lives = 3;
         //Initialize game  objects
-        player = new Player(BitmapFactory.decodeResource(getResources(),R.drawable.player),new Rect(100, 0, 250, 200));
+        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.player), new Rect(100, 0, 250, 200));
         playerPoint = new Point(Constants.SCREEN_WIDTH / 2, POSITION_Y);
 
 
-        obstacleManager = new ObstacleManager(BitmapFactory.decodeResource(getResources(),R.drawable.asteroid));
-        awardsManager=new AwardsManager(BitmapFactory.decodeResource(getResources(),R.drawable.star_gold));
+        obstacleManager = new ObstacleManager(BitmapFactory.decodeResource(getResources(), R.drawable.asteroid));
+        awardsManager = new AwardsManager(BitmapFactory.decodeResource(getResources(), R.drawable.star_gold));
 
-        if(MainActivity.gyroUse==true) {
+        if (MainActivity.gyroUse == true) {
             orientationData = new OrientationData();
             orientationData.register();
         }
-        explosion = new Explosion(BitmapFactory.decodeResource(getResources(),R.drawable.boom),250,  25);
+        explosion = new Explosion(BitmapFactory.decodeResource(getResources(), R.drawable.boom), 250, 25);
 
         frameTime = System.currentTimeMillis();
         setFocusable(true);
@@ -60,7 +60,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if(!MainActivity.gyroUse) {
+        if (!MainActivity.gyroUse) {
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -92,7 +92,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         Constants.INIT_TIME = System.currentTimeMillis();
-        background=new Background(BitmapFactory.decodeResource(getResources(),R.drawable.star_background));
+        background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.star_background));
         background.setVactor(20);//speed
         gameLoop.startLoop();
     }
@@ -107,6 +107,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceDestroyed(SurfaceHolder holder) {
         gameLoop.setRunning(false);
 
+
     }
 
     @Override
@@ -117,7 +118,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         player.draw(canvas);
         obstacleManager.draw(canvas);
         awardsManager.draw(canvas);
-        if(isExplode) {
+        if (isExplode) {
 
             explosion.draw(canvas);
         }
@@ -131,7 +132,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         if (getGameOver()) {
             drawGameOver(canvas);
             if (MainActivity.gyroUse)
-            orientationData.pause();
+                orientationData.pause();
         }
 
     }
@@ -141,11 +142,11 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         if (!gameOver) {
             if (frameTime < Constants.INIT_TIME)
                 frameTime = Constants.INIT_TIME;
-            int elapsedTime = (int)(System.currentTimeMillis() - frameTime);
+            int elapsedTime = (int) (System.currentTimeMillis() - frameTime);
             frameTime = System.currentTimeMillis();
 
             background.update();
-            if(MainActivity.gyroUse) {
+            if (MainActivity.gyroUse) {
                 if (orientationData.getOrientation() != null && orientationData.getStartOrientation() != null) {
                     float roll = orientationData.getOrientation()[2] - orientationData.getStartOrientation()[2];
                     float xSpeed = 2 * roll * Constants.SCREEN_WIDTH / 1000f;
@@ -155,17 +156,17 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
                 }
             }
 
-            if(playerPoint.x < 0)
+            if (playerPoint.x < 0)
                 playerPoint.x = 0;
-            else if(playerPoint.x > Constants.SCREEN_WIDTH)
+            else if (playerPoint.x > Constants.SCREEN_WIDTH)
                 playerPoint.x = Constants.SCREEN_WIDTH;
             player.update(playerPoint);
 
-            if(player.getState()==1){
-                player.setImage(BitmapFactory.decodeResource(getResources(),R.drawable.playe_right,null));
-            }else if(player.getState()==2) {
+            if (player.getState() == 1) {
+                player.setImage(BitmapFactory.decodeResource(getResources(), R.drawable.playe_right, null));
+            } else if (player.getState() == 2) {
                 player.setImage(BitmapFactory.decodeResource(getResources(), R.drawable.player_left, null));
-            }else if(player.getState()==0){
+            } else if (player.getState() == 0) {
                 player.setImage(BitmapFactory.decodeResource(getResources(), R.drawable.player, null));
             }
 
@@ -174,18 +175,18 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
 
             if (obstacleManager.playerCollide(player)) {
-                explosion.setPosition(playerPoint.x-135,Constants.SCREEN_HEIGHT/20*17);
+                explosion.setPosition(playerPoint.x - 135, Constants.SCREEN_HEIGHT / 20 * 17);
                 explosion.update();
-                isExplode=true;
+                isExplode = true;
                 lives--;
             } else {
                 score = score + 0.05;
-                isExplode=false;
+                isExplode = false;
             }
-            if(awardsManager.playerCollide(player)){
-                score+=100;
+            if (awardsManager.playerCollide(player)) {
+                score += 100;
             }
-            if ( lives == 0) {
+            if (lives == 0) {
                 gameOver = true;
 
             }
@@ -198,29 +199,29 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         Paint paint = new Paint();
         paint.setColor(Color.MAGENTA);
         paint.setTextSize(Constants.SCREEN_WIDTH / 9);
-        canvas.drawText("GAME OVER", Constants.SCREEN_WIDTH /5, Constants.SCREEN_HEIGHT/5, paint);
+        canvas.drawText("GAME OVER", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 5, paint);
 
     }
 
-    public boolean getGameOver(){
+    public boolean getGameOver() {
         return gameOver;
     }
 
-    public static int getScore(){
-        return (int)score;
+    public static int getScore() {
+        return (int) score;
     }
 
-    public void restart(){
-        lives=3;
-        score=0;
+    public void restart() {
+        lives = 3;
+        score = 0;
         //Initialize game  objects
-        player = new Player(BitmapFactory.decodeResource(getResources(),R.drawable.player),new Rect(100, 0, 250, 200));
+        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.player), new Rect(100, 0, 250, 200));
         playerPoint = new Point(Constants.SCREEN_WIDTH / 2, POSITION_Y);
 
 
-        obstacleManager = new ObstacleManager(BitmapFactory.decodeResource(getResources(),R.drawable.asteroid));
-        awardsManager=new AwardsManager(BitmapFactory.decodeResource(getResources(),R.drawable.star_gold));
+        obstacleManager = new ObstacleManager(BitmapFactory.decodeResource(getResources(), R.drawable.asteroid));
+        awardsManager = new AwardsManager(BitmapFactory.decodeResource(getResources(), R.drawable.star_gold));
 
-       setFocusable(true);
+        setFocusable(true);
     }
 }

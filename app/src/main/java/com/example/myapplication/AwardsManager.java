@@ -7,14 +7,14 @@ import java.util.ArrayList;
 
 public class AwardsManager implements GameObject {
     private ArrayList<Award> awards;
-    public static final int OBSTACLES_GAP=1000;
+    public static final int OBSTACLES_GAP = 1000;
     private long startTime;
     private long initTime;
     private Bitmap image;
 
 
     public AwardsManager(Bitmap image) {
-        this.image=image;
+        this.image = image;
 
         startTime = initTime = System.currentTimeMillis();
         awards = new ArrayList<>();
@@ -25,10 +25,10 @@ public class AwardsManager implements GameObject {
 
         int currY = -5 * 100000;//Game time
 
-        while (currY < 0){
-            awards.add(new Award(image,Constants.SCREEN_WIDTH/7, currY));
+        while (currY < 0) {
+            awards.add(new Award(image, Constants.SCREEN_WIDTH / 7, currY));
             //The gap between each line
-            currY += Award.RECT_HEIGHT + OBSTACLES_GAP+100;
+            currY += Award.RECT_HEIGHT + OBSTACLES_GAP + 100;
         }
 
     }
@@ -42,12 +42,12 @@ public class AwardsManager implements GameObject {
         float speed = 3;
 
         for (int i = 0; i < awards.size() - 1; i++) {
-            awards.get(i).incrementY(speed );
+            awards.get(i).incrementY(speed);
         }
 
         if (awards.get(awards.size() - 1).getRectangle().top > Constants.SCREEN_HEIGHT) {
 
-            awards.add(0, new Award(image,350, 0));
+            awards.add(0, new Award(image, 350, 0));
             awards.remove(awards.size() - 1);
 
         }
@@ -61,7 +61,7 @@ public class AwardsManager implements GameObject {
     }
 
     public boolean playerCollide(Player player) {
-        for (int i=0;i<awards.size()-1;i++) {
+        for (int i = 0; i < awards.size() - 1; i++) {
 
             if (awards.get(i).playerCollide(player)) {
                 return true;

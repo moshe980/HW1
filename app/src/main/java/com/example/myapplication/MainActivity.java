@@ -22,19 +22,19 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-    private ImageButton play_button,highScore_button;
+    private ImageButton play_button, highScore_button;
     private Context context;
     private Switch mSwitch;
+    public boolean isPlatGame;
     public static boolean gyroUse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        System.out.println("onCreate");
         super.onCreate(savedInstanceState);
         context = this;
-
+        isPlatGame = false;
         //English default:
-        Configuration config=new Configuration();
+        Configuration config = new Configuration();
         Locale locale = new Locale("en");
 
         Locale.setDefault(locale);
@@ -51,37 +51,38 @@ public class MainActivity extends AppCompatActivity {
         Constants.SCREEN_HEIGHT = dm.heightPixels;
 
 
-        String[] permissions={Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION};
-        ActivityCompat.requestPermissions(this,permissions,101);
+        String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
+        ActivityCompat.requestPermissions(this, permissions, 101);
         setContentView(R.layout.activity_main);
 
-        mSwitch=(Switch)findViewById(R.id.mswitch);
-        gyroUse=false;
+        mSwitch = (Switch) findViewById(R.id.mswitch);
+        gyroUse = false;
         mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (mSwitch.isChecked()){
-                    gyroUse=true;
-                }else {
-                    gyroUse=false;
+                if (mSwitch.isChecked()) {
+                    gyroUse = true;
+                } else {
+                    gyroUse = false;
                 }
             }
         });
 
-        play_button =  findViewById(R.id.btn_play);
+        play_button = findViewById(R.id.btn_play);
         play_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isPlatGame = true;
                 setContentView(new Game(context));
 
 
             }
         });
-        highScore_button=findViewById(R.id.btn_high_score);
+        highScore_button = findViewById(R.id.btn_high_score);
         highScore_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(context,TopTen.class);
+                Intent intent = new Intent(context, TopTen.class);
                 context.startActivity(intent);
             }
         });
@@ -89,16 +90,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
-    @Override
     public void onBackPressed() {
         super.onBackPressed();
-        System.out.println("onBackPressed");
-        Intent intent =new Intent(context, MainActivity.class);
-        context.startActivity(intent);
-        finish();
-
+        if (isPlatGame) {
+            System.out.println("onBackPressed");
+            Intent intent = new Intent(this, MainActivity.class);
+            this.startActivity(intent);
+            finish();
+        }
     }
 
 

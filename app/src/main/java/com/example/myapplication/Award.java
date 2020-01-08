@@ -18,18 +18,17 @@ public class Award implements GameObject {
     Bitmap image;
 
 
-
-    public Award(Bitmap image,int positionX, int positionY) {
+    public Award(Bitmap image, int positionX, int positionY) {
         rectangles = new Rect[5];
         counter = new Random().nextInt(5);
 
-        this.image=image;
+        this.image = image;
 
 
         rectangles[0] = new Rect(GAP, positionY, positionX, positionY + RECT_HEIGHT);
         rectangles[1] = new Rect(positionX + GAP, positionY, positionX * 2, positionY + RECT_HEIGHT);
         rectangles[2] = new Rect(positionX * 2 + GAP, positionY, positionX * 3 - GAP, positionY + RECT_HEIGHT);
-        rectangles[3] = new Rect(positionX*3 + GAP, positionY, positionX * 4, positionY + RECT_HEIGHT);
+        rectangles[3] = new Rect(positionX * 3 + GAP, positionY, positionX * 4, positionY + RECT_HEIGHT);
         rectangles[4] = new Rect(positionX * 4 + GAP, positionY, positionX * 5 - GAP, positionY + RECT_HEIGHT);
 
     }
@@ -53,8 +52,8 @@ public class Award implements GameObject {
         for (int i = 0; i < rectangles.length; i++) {
             if (i != counter) {
                 rectangles[i].setEmpty();
-            }else {
-                canvas.drawBitmap(image,null,rectangles[i],null);
+            } else {
+                canvas.drawBitmap(image, null, rectangles[i], null);
 
             }
         }

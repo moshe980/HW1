@@ -39,7 +39,7 @@ public class TopTen extends FragmentActivity implements OnMapReadyCallback {
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     private List<User> users;
-    private int counter=1;
+    private int counter = 1;
 
 
     @Override
@@ -47,9 +47,9 @@ public class TopTen extends FragmentActivity implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_ten);
 
-        contaxt=this;
+        contaxt = this;
         //English default:
-        Configuration config=new Configuration();
+        Configuration config = new Configuration();
         Locale locale = new Locale("en");
 
         Locale.setDefault(locale);
@@ -57,7 +57,7 @@ public class TopTen extends FragmentActivity implements OnMapReadyCallback {
         getBaseContext().getResources().updateConfiguration(config,
                 getBaseContext().getResources().getDisplayMetrics());
 
-        tableLayout=(TableLayout)findViewById(R.id.table);
+        tableLayout = (TableLayout) findViewById(R.id.table);
         tableLayout.setStretchAllColumns(true);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -66,7 +66,7 @@ public class TopTen extends FragmentActivity implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
 
         // Read from the database
-        users=new ArrayList<>();
+        users = new ArrayList<>();
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("users");
 
@@ -76,28 +76,28 @@ public class TopTen extends FragmentActivity implements OnMapReadyCallback {
                 Collections.sort(users, new Comparator<User>() {
                     @Override
                     public int compare(User o1, User o2) {
-                        return Integer.compare(Integer.valueOf(o2.getScore()),Integer.valueOf(o1.getScore()));
+                        return Integer.compare(Integer.valueOf(o2.getScore()), Integer.valueOf(o1.getScore()));
                     }
                 });
-                for(final User user:users){
-                    TableRow tableRow=new TableRow(contaxt);
+                for (final User user : users) {
+                    TableRow tableRow = new TableRow(contaxt);
                     //Num
-                    TextView c1=new TextView(contaxt);
+                    TextView c1 = new TextView(contaxt);
                     c1.setText(String.valueOf(counter));
                     c1.setGravity(Gravity.CENTER);
                     tableRow.addView(c1);
                     //Name
-                    TextView c2=new TextView(contaxt);
+                    TextView c2 = new TextView(contaxt);
                     c2.setText(user.getName());
                     c2.setGravity(Gravity.CENTER);
                     tableRow.addView(c2);
                     //Score
-                    TextView c3=new TextView(contaxt);
+                    TextView c3 = new TextView(contaxt);
                     c3.setText(user.getScore());
                     c3.setGravity(Gravity.CENTER);
                     tableRow.addView(c3);
                     //Location
-                    TextView c4=new TextView(contaxt);
+                    TextView c4 = new TextView(contaxt);
                     c4.setText(user.getLocation());
                     c4.setGravity(Gravity.CENTER);
                     tableRow.addView(c4);
@@ -106,12 +106,12 @@ public class TopTen extends FragmentActivity implements OnMapReadyCallback {
                     tableRow.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            double lat,lng;
+                            double lat, lng;
                             TableRow tablerow = (TableRow) v;
                             TextView sample = (TextView) tablerow.getChildAt(3);
-                            String[] result=sample.getText().toString().split(",");
-                            lat=Double.valueOf(result[0]);
-                            lng=Double.valueOf(result[1]);
+                            String[] result = sample.getText().toString().split(",");
+                            lat = Double.valueOf(result[0]);
+                            lng = Double.valueOf(result[1]);
 
                             //move the camera
                             LatLng currentLocation = new LatLng(lat, lng);
@@ -120,7 +120,6 @@ public class TopTen extends FragmentActivity implements OnMapReadyCallback {
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, zoomLevel));
 
                             mMap.getMaxZoomLevel();
-
 
 
                         }
@@ -140,17 +139,17 @@ public class TopTen extends FragmentActivity implements OnMapReadyCallback {
 
     }
 
-    public void readUsers(final FirebaseCallback firebaseCallback){
+    public void readUsers(final FirebaseCallback firebaseCallback) {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<String>keys =new ArrayList<>();
-                for(DataSnapshot keyNode:dataSnapshot.getChildren()){
+                List<String> keys = new ArrayList<>();
+                for (DataSnapshot keyNode : dataSnapshot.getChildren()) {
                     keys.add(keyNode.getKey());
-                    User user=keyNode.getValue(User.class);
+                    User user = keyNode.getValue(User.class);
                     users.add(user);
                 }
-                    firebaseCallback.onCallback(users);
+                firebaseCallback.onCallback(users);
             }
 
             @Override
@@ -159,7 +158,8 @@ public class TopTen extends FragmentActivity implements OnMapReadyCallback {
             }
         });
     }
-    private interface FirebaseCallback{
+
+    private interface FirebaseCallback {
         void onCallback(List<User> list);
     }
 }

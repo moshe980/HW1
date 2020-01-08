@@ -28,7 +28,7 @@ class GameLoop extends Thread {
     private DatabaseReference myRef;
     public static Canvas canvas;
     private List<User> users;
-    private boolean isTopTen=false;
+    private boolean isTopTen = false;
 
 
     public GameLoop(final Game game, SurfaceHolder surfaceHolder, Context context) {
@@ -82,22 +82,22 @@ class GameLoop extends Thread {
                                         return Integer.compare(Integer.valueOf(o2.getScore()), Integer.valueOf(o1.getScore()));
                                     }
                                 });
-                                if (users.size() == 10 && Integer.valueOf(users.get(9).getScore()) < Game.getScore()){
+                                if (users.size() == 10 && Integer.valueOf(users.get(9).getScore()) < Game.getScore()) {
                                     myRef.child(String.valueOf(users.get(9).getId())).removeValue();
                                     isTopTen = true;
                                 } else if (users.size() < 10) {
                                     isTopTen = true;
-                                }else {
-                                    isTopTen=false;
+                                } else {
+                                    isTopTen = false;
                                 }
                                 if (isTopTen) {
-                                    Intent intent =new Intent(context, Registration.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+                                    Intent intent = new Intent(context, Registration.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     context.startActivity(intent);
 
 
                                 } else {
-                                    Intent intent =new Intent(context, MainActivity.class);
+                                    Intent intent = new Intent(context, MainActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     context.startActivity(intent);
                                 }
@@ -135,7 +135,6 @@ class GameLoop extends Thread {
                 averageFPS = 1000 / ((totalTime / frameCount) / 1000000);
                 frameCount = 0;
                 totalTime = 0;
-                System.out.println(averageFPS);
             }
         }
     }
@@ -163,4 +162,5 @@ class GameLoop extends Thread {
     private interface FirebaseCallback {
         void onCallback(List<User> list);
     }
+
 }

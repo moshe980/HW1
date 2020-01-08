@@ -14,11 +14,13 @@ public class User {
         this.name = name;
         this.score = score;
         this.location = location;
-        this.id=this.hashCode();
+        this.id = this.hashCode();
     }
-    public User(){
+
+    public User() {
 
     }
+
     public String getName() {
         return name;
     }
@@ -30,7 +32,8 @@ public class User {
     public String getLocation() {
         return location;
     }
-    public int getId(){
+
+    public int getId() {
         return id;
     }
 }
