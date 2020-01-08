@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,23 +10,26 @@ import android.graphics.Rect;
 
 import java.util.Random;
 
-public class Awards implements GameObject {
+public class Award implements GameObject {
     private int counter;
     private Rect rectangles[];
-    public static final int RECT_HEIGHT = 70;
-    public static final int GAP = 15;
+    public static final int RECT_HEIGHT = 130;
+    public static final int GAP = 20;
+    Bitmap image;
 
 
-    public Awards(int positionX, int positionY) {
+
+    public Award(Bitmap image,int positionX, int positionY) {
         rectangles = new Rect[5];
         counter = new Random().nextInt(5);
 
+        this.image=image;
 
 
         rectangles[0] = new Rect(GAP, positionY, positionX, positionY + RECT_HEIGHT);
         rectangles[1] = new Rect(positionX + GAP, positionY, positionX * 2, positionY + RECT_HEIGHT);
         rectangles[2] = new Rect(positionX * 2 + GAP, positionY, positionX * 3 - GAP, positionY + RECT_HEIGHT);
-        rectangles[3] = new Rect(positionX * 3 + GAP, positionY, positionX * 4, positionY + RECT_HEIGHT);
+        rectangles[3] = new Rect(positionX*3 + GAP, positionY, positionX * 4, positionY + RECT_HEIGHT);
         rectangles[4] = new Rect(positionX * 4 + GAP, positionY, positionX * 5 - GAP, positionY + RECT_HEIGHT);
 
     }
@@ -45,21 +49,13 @@ public class Awards implements GameObject {
 
     @Override
     public void draw(Canvas canvas) {
-        Paint paint = new Paint();
-        paint.setColor(Color.YELLOW);
-        Paint paint2 = new Paint();
-        paint2.setTextSize(50);
-        paint2.setTextAlign(Paint.Align.CENTER);
-
-
-        canvas.drawRect(rectangles[counter], paint);
-
-        canvas.drawText("+200",rectangles[counter].centerX(),rectangles[counter].centerY()+rectangles[counter].height()/3,paint2);
-
 
         for (int i = 0; i < rectangles.length; i++) {
             if (i != counter) {
                 rectangles[i].setEmpty();
+            }else {
+                canvas.drawBitmap(image,null,rectangles[i],null);
+
             }
         }
 

@@ -44,6 +44,7 @@ public class OrientationData implements SensorEventListener {
     }
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        System.out.println("ddd");
 
     }
 
@@ -62,7 +63,6 @@ public class OrientationData implements SensorEventListener {
                 if(startOrientation==null){
                     startOrientation=new float[orientation.length];
                     System.arraycopy(orientation,0,startOrientation,0,orientation.length);
-                   // startOrientation=orientation;
                 }
             }
         }

@@ -30,9 +30,7 @@ public class ObstacleManager implements GameObject {
     }
 
     }
-    public float getSpeed(){
-        return speed;
-    }
+
     @Override
     public void update() {
         int elapsedTime = (int) (System.currentTimeMillis() - startTime);//acceleration

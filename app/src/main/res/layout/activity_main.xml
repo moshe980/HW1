@@ -20,8 +20,6 @@
         android:src="@drawable/btn_play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="40dp"
-        android:text="Start Game"
         android:layout_gravity="center"
         android:background="#00000000">
 
@@ -33,12 +31,20 @@
             android:src="@drawable/btn_high_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="40dp"
-            android:text="Start Game"
             android:layout_gravity="center"
             android:background="#00000000">
 
         </ImageButton>
+        <Switch
+            android:id="@+id/mswitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Use GYRO"
+            android:layout_gravity="center"
+            android:checked="false"
+            >
+
+        </Switch>
 
 
 
