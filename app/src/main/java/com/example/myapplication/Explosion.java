@@ -27,7 +27,6 @@ public class Explosion implements GameObject {
             image[i] = Bitmap.createBitmap(spritesheet,i*width,0,width,spritesheet.getHeight());
         }
         animation.setFrames(image);
-        animation.setDelay(10);
 
 
 
