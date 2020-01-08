@@ -66,9 +66,6 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
                 case MotionEvent.ACTION_DOWN:
                     if (gameOver) {
                         gameOver = false;
-
-                       // orientationData.newGame();
-
                     } else if (player.getRectangle().contains((int) event.getX(), (int) event.getY())) {
                         movingPlayer = true;
                     }

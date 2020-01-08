@@ -88,7 +88,7 @@ public class Registration extends Activity {
         String userName = editText.getText().toString();
 
         if (!TextUtils.isEmpty(userName)) {
-            if(currentLocation!=null) {
+         //   if(currentLocation!=null) {
 
                 User user = new User(userName, String.valueOf(Game.getScore()), String.valueOf(currentLocation.getLatitude() + "," + currentLocation.getLongitude()));
                 databaseUsers.child(String.valueOf(user.getId())).setValue(user);
@@ -103,9 +103,9 @@ public class Registration extends Activity {
                 Toast.makeText(this, "Can't find your location", Toast.LENGTH_LONG).show();
 
             }
-        } else {
-            Toast.makeText(this, "You should enter a name", Toast.LENGTH_LONG).show();
-        }
+        //} else {
+           // Toast.makeText(this, "You should enter a name", Toast.LENGTH_LONG).show();
+     //   }
     }
 
     public void onBackPressed() {
